@@ -1,0 +1,64 @@
+'use strict';
+var ImageMagickCommands = require('../lib/commands');
+require('should');
+
+describe('ImageMagickCommands', function () {
+	beforeEach(function () {
+		this.cmds = new ImageMagickCommands();
+	});
+
+	it('should apply commands in the same order as its called', function () {
+		var cmd = this.cmds.strip()
+			.quality(5)
+			.crop({ width: 1, height: 2, x: 3, y: 4})
+			.get('src.jpg', 'dst.jpg');
+
+		cmd.should.equal('convert src.jpg -strip -quality 5 -crop 1x2+3+4 dst.jpg');
+	});
+
+	describe('#rotate', function () {
+		it('should not apply when angle is 0', function () {
+			var cmd = this.cmds.rotate({ angle: 0, x: 1, y: 2 }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg dst.jpg');
+		});
+
+		it('should set default bgColor', function () {
+			var cmd = this.cmds.rotate({ angle: 1, x: 1, y: 2 }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg -background black -virtual-pixel background -distort ScaleRotateTranslate \'1,2 1\' dst.jpg');
+		});
+	});
+
+	describe('#sharpen', function () {
+		it('should be ignored when mode is off', function () {
+			var cmd = this.cmds.sharpen({ mode: 'off' }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg dst.jpg');
+		});
+
+		it('should be ignored when mode is falsy', function () {
+			var cmd = this.cmds.sharpen({ mode: 0 }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg dst.jpg');
+		});
+
+		it('should be ignored when mode is variable and no width or height is specified', function () {
+			var cmd = this.cmds.sharpen({ mode: 'variable' }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg dst.jpg');
+		});
+
+		it('should be choose preset when mode is variable', function () {
+			var cmd = this.cmds.sharpen({ mode: 'variable', width: 250, height: 250 }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg -unsharp 0.65x0.65+1.1+0.05 dst.jpg');
+		});
+	});
+
+	describe('#sharpen', function () {
+		it('should handle positive x,y values', function () {
+			var cmd = this.cmds.crop({ width: 100, height: 250, x: 10, y: 0 }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg -crop 100x250+10+0 dst.jpg');
+		});
+
+		it('should handle negative x,y values', function () {
+			var cmd = this.cmds.crop({ width: 100, height: 250, x: -10, y: -12 }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg -crop 100x250-10-12 dst.jpg');
+		});
+	});
+});
