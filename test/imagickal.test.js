@@ -25,7 +25,7 @@ describe('Imagick', function () {
 		});
 	});
 
-	describe.only('#transform', function () {
+	describe('#transform', function () {
 		beforeEach(function () {
 			this.exec = ImagickCommands.prototype.exec;
 			ImagickCommands.prototype.exec = function (src, dst) {
