@@ -19,7 +19,7 @@ describe('Imagick', function () {
 	describe('#identify', function () {
 		it('should return data in as an object', function (done) {
 			im.identify(imageFile).then(function (data) {
-				data.should.eql({ format: 'JPEG', width: 13, height: 10 });
+				data.should.eql({ format: 'jpg', width: 13, height: 10 });
 				done();
 			}).done();
 		});
