@@ -22,9 +22,9 @@ describe('ImageMagickCommands', function () {
 			cmd.should.equal('convert src.jpg dst.jpg');
 		});
 
-		it('should set default bgColor', function () {
-			var cmd = this.cmds.rotate({ angle: 1, x: 1, y: 2 }).get('src.jpg', 'dst.jpg');
-			cmd.should.equal('convert src.jpg -background black -virtual-pixel background -distort ScaleRotateTranslate \'1,2 1\' dst.jpg');
+		it('should set background if supplied', function () {
+			var cmd = this.cmds.rotate({ angle: 1, x: 1, y: 2, bgColor: 'blue' }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg -background blue -virtual-pixel background -distort ScaleRotateTranslate \'1,2 1\' dst.jpg');
 		});
 	});
 
