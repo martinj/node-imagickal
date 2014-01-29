@@ -23,6 +23,11 @@ node wrapper for ImageMagick commands
 		console.log(data);
 	});
 
+	//Don't like using promises, use regular node style callbacks for all functions that returns promises.
+	im.identify('image.jpg', function (err, data) {
+		console.log(data);
+	});
+
 	//transform image with action object,
 	//actions is applied in the same order as they are recevied
 	var actions =  {

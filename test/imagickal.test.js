@@ -1,5 +1,5 @@
 'use strict';
-var Q = require('q'),
+var Promise = require('bluebird'),
 	ImagickCommands = require('../lib/commands'),
 	im = require(__dirname + '/../');
 require('should');
@@ -14,6 +14,14 @@ describe('Imagick', function () {
 				done();
 			}).done();
 		});
+
+		it('should accept callback function', function (done) {
+			im.dimensions(imageFile, function (err, dim) {
+				dim.width.should.equal(13);
+				dim.height.should.equal(10);
+				done();
+			});
+		});
 	});
 
 	describe('#identify', function () {
@@ -23,13 +31,20 @@ describe('Imagick', function () {
 				done();
 			}).done();
 		});
+
+		it('should accept callback function', function (done) {
+			im.identify(imageFile, function (err, data) {
+				data.should.eql({ format: 'jpg', width: 13, height: 10 });
+				done();
+			});
+		});
 	});
 
 	describe('#transform', function () {
 		beforeEach(function () {
 			this.exec = ImagickCommands.prototype.exec;
 			ImagickCommands.prototype.exec = function (src, dst) {
-				return Q.resolve(this.commands);
+				return Promise.resolve(this.commands);
 			};
 		});
 

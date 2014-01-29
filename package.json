@@ -1,6 +1,6 @@
 {
   "name": "imagickal",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Promised based wrapper for ImageMagick commands.",
   "main": "index.js",
   "scripts": {
@@ -12,10 +12,10 @@
     "homepage": "http://github.com/martinj/node-imagickal"
   },
   "keywords": [
-  	"image",
-  	"imagick",
-  	"imagemagick",
-  	"image-magick"
+    "image",
+    "imagick",
+    "imagemagick",
+    "image-magick"
   ],
   "author": "Martin Jonsson <martin.jonsson@gmail.com>",
   "license": "MIT",
@@ -23,8 +23,8 @@
     "url": "https://github.com/martinj/node-imagickal/issues"
   },
   "dependencies": {
-    "q": "~0.9.6",
-    "debug": "~0.7.2"
+    "debug": "~0.7.2",
+    "bluebird": "~1.0.1"
   },
   "devDependencies": {
     "mocha": "~1.12.1",
