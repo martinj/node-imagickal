@@ -41,37 +41,60 @@ describe('Imagick', function () {
 	});
 
 	describe('#transform', function () {
-		beforeEach(function () {
-			this.exec = ImagickCommands.prototype.exec;
-			ImagickCommands.prototype.exec = function (src, dst) {
-				return Promise.resolve(this.commands);
-			};
+		describe('callback function', function () {
+			beforeEach(function () {
+				this.get = ImagickCommands.prototype.get;
+				ImagickCommands.prototype.get = function (src, dst) {
+					return 'echo';
+				};
+			});
+
+			afterEach(function () {
+				ImagickCommands.prototype.get = this.get;
+			});
+
+
+			it('should accept callback function', function (done) {
+				im.transform(imageFile, 'dst.jpg', { strip: true }, function (err, dst) {
+					dst.should.equal('dst.jpg');
+					done();
+				});
+			});
 		});
 
-		afterEach(function () {
-			ImagickCommands.prototype.exec = this.exec;
-		});
+		describe('command order', function () {
+			beforeEach(function () {
+				this.exec = ImagickCommands.prototype.exec;
+				ImagickCommands.prototype.exec = function (src, dst) {
+					return Promise.resolve(this.commands);
+				};
+			});
 
-		it('should create commands in order on transform', function (done) {
-			var expected = [
-				'-quality 10',
-				'-strip',
-				'-unsharp 0.8x0.8+1.2+0.05',
-				'-filter Catrom -resize 100x',
-				'-crop 10x12+1+2'
-			];
+			afterEach(function () {
+				ImagickCommands.prototype.exec = this.exec;
+			});
 
-			im.transform(imageFile, 'dst.jpg', {
-				quality: 10,
-				strip: true,
-				sharpen: { mode: 'variable' },
-				resize: { width: 100 },
-				crop: { width: 10, height: 12, x: 1, y: 2 },
-				rotate: { angle: 20 }
-			}).then(function (commands) {
-				commands.should.eql(expected);
-				done();
-			}).done();
+			it('should create commands in order on transform', function (done) {
+				var expected = [
+					'-quality 10',
+					'-strip',
+					'-unsharp 0.8x0.8+1.2+0.05',
+					'-filter Catrom -resize 100x',
+					'-crop 10x12+1+2'
+				];
+
+				im.transform(imageFile, 'dst.jpg', {
+					quality: 10,
+					strip: true,
+					sharpen: { mode: 'variable' },
+					resize: { width: 100 },
+					crop: { width: 10, height: 12, x: 1, y: 2 },
+					rotate: { angle: 20 }
+				}).then(function (commands) {
+					commands.should.eql(expected);
+					done();
+				}).done();
+			});
 		});
 	});
 });
