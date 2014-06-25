@@ -79,7 +79,7 @@ describe('Imagick', function () {
 					'-quality 10',
 					'-strip',
 					'-unsharp 0.8x0.8+1.2+0.05',
-					'-filter Catrom -resize 100x',
+					'-filter Catrom -resize 100x\\!',
 					'-crop 10x12+1+2'
 				];
 
@@ -87,7 +87,7 @@ describe('Imagick', function () {
 					quality: 10,
 					strip: true,
 					sharpen: { mode: 'variable' },
-					resize: { width: 100 },
+					resize: { width: 100, flag: '!' },
 					crop: { width: 10, height: 12, x: 1, y: 2 },
 					rotate: { angle: 20 }
 				}).then(function (commands) {

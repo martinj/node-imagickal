@@ -28,6 +28,28 @@ describe('ImageMagickCommands', function () {
 		});
 	});
 
+	describe('#resize', function () {
+		it('should not apply when if width or height is missing', function () {
+			var cmd = this.cmds.resize({ flag: '!' }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg dst.jpg');
+		});
+
+		it('should quote some flags', function () {
+			var cmd = this.cmds.resize({ width: 10, flag: '>' }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg -filter Catrom -resize 10x\\> dst.jpg');
+
+			this.cmds = new ImageMagickCommands();
+			cmd = this.cmds.resize({ width: 10, flag: '^' }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg -filter Catrom -resize 10x^ dst.jpg');
+
+		});
+
+		it('should not set flag if invalid', function () {
+			var cmd = this.cmds.resize({ width: 10, flag: 'f' }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg -filter Catrom -resize 10x dst.jpg');
+		});
+	});
+
 	describe('#sharpen', function () {
 		it('should be ignored when mode is off', function () {
 			var cmd = this.cmds.sharpen({ mode: 'off' }).get('src.jpg', 'dst.jpg');
@@ -50,7 +72,7 @@ describe('ImageMagickCommands', function () {
 		});
 	});
 
-	describe('#sharpen', function () {
+	describe('#crop', function () {
 		it('should handle positive x,y values', function () {
 			var cmd = this.cmds.crop({ width: 100, height: 250, x: 10, y: 0 }).get('src.jpg', 'dst.jpg');
 			cmd.should.equal('convert src.jpg -crop 100x250+10+0 dst.jpg');

@@ -55,7 +55,7 @@ node wrapper for ImageMagick commands
 
 - rotate Rotate image, properties { angle: 0, x: 0, y: 0 }
 - crop - Crop image, properties { width: 2560, height: 1013, x: 0, y: 0 }
-- resize - Resize image, properties { width: 470, height: 186 }
+- resize - Resize image, properties { width: 470, height: 186, flag: '>' }, available flags <,>,!,^ for more info read about them in the imagemagick [resize docs](http://www.imagemagick.org/Usage/resize/#noaspect)
 - sharpen - Sharepn image, properties { mode: 'variable' }, available modes are: light, moderate, strong, extreme, off.
 - strip - Strip image of all profiles and comments.
 - quality - Compression quality, defaults to 85.
