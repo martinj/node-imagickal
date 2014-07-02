@@ -3,6 +3,9 @@
   "version": "0.5.0",
   "description": "Promised based wrapper for ImageMagick commands.",
   "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
   "scripts": {
     "test": "./node_modules/.bin/jshint test/ lib/ index.js && ./node_modules/.bin/mocha test/*.test.js",
     "release": "npm test && release-it -n -i patch",
@@ -26,8 +29,8 @@
     "url": "https://github.com/martinj/node-imagickal/issues"
   },
   "dependencies": {
-    "debug": "~0.7.2",
-    "bluebird": "~1.0.1"
+    "bluebird": "^2.1.3",
+    "debug": "^0.7.2"
   },
   "devDependencies": {
     "mocha": "~1.12.1",
