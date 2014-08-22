@@ -1,6 +1,6 @@
 {
   "name": "imagickal",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Promised based wrapper for ImageMagick commands.",
   "main": "index.js",
   "engines": {
