@@ -4,21 +4,25 @@ var Promise = require('bluebird'),
 	im = require(__dirname + '/../');
 require('should');
 
-var imageFile = __dirname + '/fixtures/small.jpg';
+var imageFile = __dirname + '/fixtures/small.jpg',
+	animImage = __dirname + '/fixtures/anim.gif';
+
 describe('Imagick', function () {
 	describe('#dimensions', function () {
 		it('should return dimensions', function (done) {
 			im.dimensions(imageFile).then(function (dim) {
 				dim.width.should.equal(13);
 				dim.height.should.equal(10);
+				dim.images.should.equal(1);
 				done();
 			}).done();
 		});
 
 		it('should accept callback function', function (done) {
-			im.dimensions(imageFile, function (err, dim) {
-				dim.width.should.equal(13);
-				dim.height.should.equal(10);
+			im.dimensions(animImage, function (err, dim) {
+				dim.width.should.equal(64);
+				dim.height.should.equal(64);
+				dim.images.should.equal(2);
 				done();
 			});
 		});
@@ -27,14 +31,17 @@ describe('Imagick', function () {
 	describe('#identify', function () {
 		it('should return data in as an object', function (done) {
 			im.identify(imageFile).then(function (data) {
-				data.should.eql({ format: 'jpg', width: 13, height: 10 });
+				data.should.eql({ format: 'jpg', width: 13, height: 10, images: 1 });
 				done();
 			}).done();
 		});
 
 		it('should accept callback function', function (done) {
-			im.identify(imageFile, function (err, data) {
-				data.should.eql({ format: 'jpg', width: 13, height: 10 });
+			im.identify(animImage, function (err, data) {
+				if (err) {
+					return done(err);
+				}
+				data.should.eql({ format: 'gif', width: 64, height: 64, images: 2 });
 				done();
 			});
 		});
