@@ -23,6 +23,11 @@ node wrapper for ImageMagick commands
 		console.log(data);
 	});
 
+	//Add true as second argument on identify to check if the image is corrupt.
+	im.identify('image.jpg', true).then(function (data) {
+		console.log(data);
+	});
+
 	//Don't like using promises, use regular node style callbacks for all functions that returns promises.
 	im.identify('image.jpg', function (err, data) {
 		console.log(data);
