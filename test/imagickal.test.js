@@ -5,7 +5,6 @@ var Promise = require('bluebird'),
 require('should');
 
 var imageFile = __dirname + '/fixtures/small.jpg',
-	brokenImage = __dirname + '/fixtures/broken.jpg',
 	animImage = __dirname + '/fixtures/anim.gif';
 
 describe('Imagick', function () {
@@ -49,14 +48,6 @@ describe('Imagick', function () {
 		it('should return data in as an object', function (done) {
 			im.identify(imageFile).then(function (data) {
 				data.should.eql({ format: 'jpg', width: 13, height: 10, images: 1 });
-				done();
-			}).done();
-		});
-
-		it('should fail on corrupt image', function (done) {
-			im.identify(brokenImage, true).catch(function (err) {
-				err.code.should.equal(1);
-				err.message.should.match(/^Command failed: identify: Corrupt/);
 				done();
 			}).done();
 		});
