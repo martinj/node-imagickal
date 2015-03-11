@@ -5,7 +5,7 @@ node_js:
 
 before_install:
   - sudo apt-get remove -y imagemagick
-  - wget http://www.imagemagick.org/download/releases/ImageMagick-6.8.9-8.tar.gz
+  - wget http://www.imagemagick.org/download/releases/ImageMagick-6.8.9-10.tar.gz
   - tar xf ImageMagick-6.8.9-8.tar.gz
   - cd ImageMagick*
   - ./configure --prefix=/usr
