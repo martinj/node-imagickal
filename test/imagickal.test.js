@@ -9,6 +9,22 @@ var imageFile = __dirname + '/fixtures/small.jpg',
 	animImage = __dirname + '/fixtures/anim.gif';
 
 describe('Imagick', function () {
+	describe('#setDefaults', function () {
+		afterEach(function () {
+			im.setDefaults({});
+		});
+
+		it('should use global defaults', function () {
+			im.setDefaults({ executable: 'foobar' });
+			im.commands().get('a', 'b').should.equal('foobar a b');
+		});
+
+		it('should ignore global defaults if options is passed to commands()', function () {
+			im.setDefaults({ executable: 'foobar' });
+			im.commands({ executable: 'monkey' }).get('a', 'b').should.equal('monkey a b');
+		});
+	});
+
 	describe('#dimensions', function () {
 		it('should return dimensions', function (done) {
 			im.dimensions(imageFile).then(function (dim) {

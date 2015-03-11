@@ -40,6 +40,7 @@
 	"expr" : true,
 	"smarttabs": true,
 	"predef" : [
+		"-Promise",
 		"describe",
 		"it",
 		"beforeEach",

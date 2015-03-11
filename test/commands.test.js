@@ -7,6 +7,12 @@ describe('ImageMagickCommands', function () {
 		this.cmds = new ImageMagickCommands();
 	});
 
+	it('should be able to configure custom executable', function () {
+		var cmds = new ImageMagickCommands({ executable: 'MAGICK_MEMORY_LIMIT=256MB /tmp/convert' });
+		var cmd = cmds.get('src.jpg', 'dst.jpg');
+		cmd.should.equal('MAGICK_MEMORY_LIMIT=256MB /tmp/convert src.jpg dst.jpg');
+	});
+
 	it('should apply commands in the same order as its called', function () {
 		var cmd = this.cmds.strip()
 			.quality(5)

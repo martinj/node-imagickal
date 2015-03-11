@@ -56,6 +56,12 @@ node wrapper for ImageMagick commands
 			console.log('done');
 		});
 
+	//specify executable path
+	im.commands({ executable: 'MAGICK_MEMORY_LIMIT=256MB /tmp/convert' }).exec('src.jpg', 'dst.png');
+
+	//or set global for im.
+	im.setDefaults({ executable: 'MAGICK_MEMORY_LIMIT=256MB /tmp/convert' });
+
 ## Available image actions / commands
 
 - rotate Rotate image, properties { angle: 0, x: 0, y: 0 }
