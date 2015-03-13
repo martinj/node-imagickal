@@ -57,6 +57,11 @@ describe('ImageMagickCommands', function () {
 	});
 
 	describe('#sharpen', function () {
+		it('should be ignored if mode is unknown', function () {
+			var cmd = this.cmds.sharpen({ mode: 'foobar' }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg dst.jpg');
+		});
+
 		it('should be ignored when mode is off', function () {
 			var cmd = this.cmds.sharpen({ mode: 'off' }).get('src.jpg', 'dst.jpg');
 			cmd.should.equal('convert src.jpg dst.jpg');
