@@ -54,6 +54,16 @@ describe('ImageMagickCommands', function () {
 			var cmd = this.cmds.resize({ width: 10, flag: 'f' }).get('src.jpg', 'dst.jpg');
 			cmd.should.equal('convert src.jpg -filter Catrom -resize 10x dst.jpg');
 		});
+
+		it('should set gravity option', function () {
+			var cmd = this.cmds.resize({ width: 10, flag: '^', gravity: 'Center' }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg -filter Catrom -resize 10x^ -gravity Center dst.jpg');
+		});
+
+		it('should not set gravity option if invalid', function () {
+			var cmd = this.cmds.resize({ width: 10, flag: '^', gravity: 'Invalid' }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg -filter Catrom -resize 10x^ dst.jpg');
+		});
 	});
 
 	describe('#sharpen', function () {
