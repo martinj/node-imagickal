@@ -104,4 +104,18 @@ describe('ImageMagickCommands', function () {
 			cmd.should.equal('convert src.jpg -crop 100x250-10-12 dst.jpg');
 		});
 	});
+
+	describe('#extent', function () {
+		it('should be ignored if width or height is not set', function () {
+			var widthCmd = this.cmds.extent({ width: 100 }).get('src.jpg', 'dst.jpg');
+			var heightCmd = this.cmds.extent({ height: 100 }).get('src.jpg', 'dst.jpg');
+			widthCmd.should.equal('convert src.jpg dst.jpg');
+			heightCmd.should.equal('convert src.jpg dst.jpg');
+		});
+
+		it('should be applied if both width and height are present', function () {
+			var cmd = this.cmds.extent({ width: 100, height: 200 }).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert src.jpg -extent 100x200 dst.jpg');
+		});
+	});
 });
