@@ -97,6 +97,17 @@ describe('Imagick', function () {
 				ImagickCommands.prototype.exec = this.exec;
 			});
 
+			it('should ignore invalid actions', function (done) {
+				im.transform('src.jpg', 'dst.jpg', {
+					quality: 10,
+					exec: 'no',
+					foobar: 'monkey'
+				}).then(function (commands) {
+					commands.should.eql(['-quality 10']);
+					done();
+				}).done();
+			});
+
 			it('should create commands in order on transform', function (done) {
 				var expected = [
 					'-quality 10',
