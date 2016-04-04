@@ -31,7 +31,7 @@ describe('Imagick', function () {
 				dim.height.should.equal(10);
 				dim.images.should.equal(1);
 				done();
-			}).done();
+			}).catch(done);
 		});
 
 		it('should accept callback function', function (done) {
@@ -49,7 +49,7 @@ describe('Imagick', function () {
 			im.identify(imageFile).then(function (data) {
 				data.should.eql({ format: 'jpg', width: 13, height: 10, images: 1 });
 				done();
-			}).done();
+			}).catch(done);
 		});
 
 		it('should accept callback function', function (done) {
@@ -105,7 +105,7 @@ describe('Imagick', function () {
 				}).then(function (commands) {
 					commands.should.eql(['-quality 10']);
 					done();
-				}).done();
+				}).catch(done);
 			});
 
 			it('should create commands in order on transform', function (done) {
@@ -127,7 +127,7 @@ describe('Imagick', function () {
 				}).then(function (commands) {
 					commands.should.eql(expected);
 					done();
-				}).done();
+				}).catch(done);
 			});
 		});
 	});
