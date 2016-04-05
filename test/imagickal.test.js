@@ -1,11 +1,12 @@
 'use strict';
-var Promise = require('bluebird'),
-	ImagickCommands = require('../lib/commands'),
-	im = require(__dirname + '/../');
+var Promise = require('bluebird');
+var ImagickCommands = require('../lib/commands');
+var im = require(__dirname + '/../');
+
 require('should');
 
-var imageFile = __dirname + '/fixtures/small.jpg',
-	animImage = __dirname + '/fixtures/anim.gif';
+var imageFile = __dirname + '/fixtures/small.jpg';
+var animImage = __dirname + '/fixtures/anim.gif';
 
 describe('Imagick', function () {
 	describe('#setDefaults', function () {
@@ -36,6 +37,10 @@ describe('Imagick', function () {
 
 		it('should accept callback function', function (done) {
 			im.dimensions(animImage, function (err, dim) {
+				if (err) {
+					return done(err);
+				}
+
 				dim.width.should.equal(64);
 				dim.height.should.equal(64);
 				dim.images.should.equal(2);
@@ -79,6 +84,10 @@ describe('Imagick', function () {
 
 			it('should accept callback function', function (done) {
 				im.transform(imageFile, 'dst.jpg', { strip: true }, function (err, dst) {
+					if (err) {
+						return done(err);
+					}
+
 					dst.should.equal('dst.jpg');
 					done();
 				});

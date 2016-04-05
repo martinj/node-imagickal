@@ -13,7 +13,7 @@ describe('ImageMagickCommands', function () {
 		var cmds = new ImageMagickCommands();
 		var cmd = cmds.strip()
 			.quality(5)
-			.crop({ width: 1, height: 2, x: 3, y: 4})
+			.crop({ width: 1, height: 2, x: 3, y: 4 })
 			.get('src.jpg', 'dst.jpg');
 
 		cmd.should.equal('convert src.jpg -strip -quality 5 -crop 1x2+3+4 dst.jpg');
