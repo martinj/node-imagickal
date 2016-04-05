@@ -3,7 +3,10 @@ language: node_js
 node_js:
   - 0.10
   - 0.12
-  - iojs
+  - 4
 
 script:
   - npm test
+
+before_install:
+  - npm -g install npm@latest-2
