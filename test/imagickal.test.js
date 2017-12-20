@@ -1,42 +1,55 @@
 'use strict';
-var Promise = require('bluebird');
-var ImagickCommands = require('../lib/commands');
-var im = require(__dirname + '/../');
+const Promise = require('bluebird');
+const fs = require('fs');
+const ImagickCommands = require('../lib/commands');
+const im = require(__dirname + '/../');
+const isJPG = require('./helper').isJPG;
 
 require('should');
 
-var imageFile = __dirname + '/fixtures/small.jpg';
-var animImage = __dirname + '/fixtures/anim.gif';
+const imageFile = __dirname + '/fixtures/small.jpg';
+const animImage = __dirname + '/fixtures/anim.gif';
 
-describe('Imagick', function () {
-	describe('#setDefaults', function () {
-		afterEach(function () {
+describe('Imagick', () => {
+	describe('#setDefaults', () => {
+		afterEach(() => {
 			im.setDefaults({});
 		});
 
-		it('should use global defaults', function () {
+		it('should use global defaults', () => {
 			im.setDefaults({ executable: 'foobar' });
 			im.commands().get('a', 'b').should.equal('foobar a b');
 		});
 
-		it('should ignore global defaults if options is passed to commands()', function () {
+		it('should ignore global defaults if options is passed to commands()', () => {
 			im.setDefaults({ executable: 'foobar' });
 			im.commands({ executable: 'monkey' }).get('a', 'b').should.equal('monkey a b');
 		});
 	});
 
-	describe('#dimensions', function () {
-		it('should return dimensions', function (done) {
-			im.dimensions(imageFile).then(function (dim) {
-				dim.width.should.equal(13);
-				dim.height.should.equal(10);
-				dim.images.should.equal(1);
-				done();
-			}).catch(done);
+	describe('#dimensions', () => {
+		it('should support streams', () => {
+			return im
+				.dimensions(fs.createReadStream(imageFile))
+				.then((dim) => {
+					dim.width.should.equal(13);
+					dim.height.should.equal(10);
+					dim.images.should.equal(1);
+				});
 		});
 
-		it('should accept callback function', function (done) {
-			im.dimensions(animImage, function (err, dim) {
+		it('should return dimensions', () => {
+			return im
+				.dimensions(imageFile)
+				.then((dim) => {
+					dim.width.should.equal(13);
+					dim.height.should.equal(10);
+					dim.images.should.equal(1);
+				});
+		});
+
+		it('should accept callback function', (done) => {
+			im.dimensions(animImage, (err, dim) => {
 				if (err) {
 					return done(err);
 				}
@@ -49,16 +62,25 @@ describe('Imagick', function () {
 		});
 	});
 
-	describe('#identify', function () {
-		it('should return data in as an object', function (done) {
-			im.identify(imageFile).then(function (data) {
-				data.should.eql({ format: 'jpg', width: 13, height: 10, images: 1 });
-				done();
-			}).catch(done);
+	describe('#identify', () => {
+		it('should support streams', () => {
+			return im
+				.identify(fs.createReadStream(imageFile))
+				.then((data) => {
+					data.should.eql({ format: 'jpg', width: 13, height: 10, images: 1 });
+				});
 		});
 
-		it('should accept callback function', function (done) {
-			im.identify(animImage, function (err, data) {
+		it('should return data in as an object', () => {
+			return im
+				.identify(imageFile)
+				.then((data) => {
+					data.should.eql({ format: 'jpg', width: 13, height: 10, images: 1 });
+				});
+		});
+
+		it('should accept callback function', (done) => {
+			im.identify(animImage, (err, data) => {
 				if (err) {
 					return done(err);
 				}
@@ -68,22 +90,22 @@ describe('Imagick', function () {
 		});
 	});
 
-	describe('#transform', function () {
-		describe('callback function', function () {
-			beforeEach(function () {
+	describe('#transform', () => {
+		describe('callback function', () => {
+			beforeEach(() => {
 				this.get = ImagickCommands.prototype.get;
-				ImagickCommands.prototype.get = function (src, dst) {
+				ImagickCommands.prototype.get = function () {
 					return 'echo';
 				};
 			});
 
-			afterEach(function () {
+			afterEach(() => {
 				ImagickCommands.prototype.get = this.get;
 			});
 
 
-			it('should accept callback function', function (done) {
-				im.transform(imageFile, 'dst.jpg', { strip: true }, function (err, dst) {
+			it('should accept callback function', (done) => {
+				im.transform(imageFile, 'dst.jpg', { strip: true }, (err, dst) => {
 					if (err) {
 						return done(err);
 					}
@@ -94,31 +116,52 @@ describe('Imagick', function () {
 			});
 		});
 
-		describe('command order', function () {
-			beforeEach(function () {
+		describe('#transform', () => {
+			beforeEach(() => {
+				try {
+					fs.unlinkSync('test.jpg'); // eslint-disable-line no-sync
+				} catch (e) {}
+			});
+
+			it('should support streams', () => {
+				return im
+					.transform(fs.createReadStream(imageFile), fs.createWriteStream('test.jpg', { encoding: 'binary' }), {
+						quality: 10,
+						strip: true,
+						sharpen: { mode: 'variable' }
+					})
+					.then(() => {
+						isJPG('test.jpg').should.be.true();
+					});
+			});
+		});
+
+		describe('command order', () => {
+			beforeEach(() => {
 				this.exec = ImagickCommands.prototype.exec;
-				ImagickCommands.prototype.exec = function (src, dst) {
+				ImagickCommands.prototype.exec = function () {
 					return Promise.resolve(this.commands);
 				};
 			});
 
-			afterEach(function () {
+			afterEach(() => {
 				ImagickCommands.prototype.exec = this.exec;
 			});
 
-			it('should ignore invalid actions', function (done) {
-				im.transform('src.jpg', 'dst.jpg', {
-					quality: 10,
-					exec: 'no',
-					foobar: 'monkey'
-				}).then(function (commands) {
-					commands.should.eql(['-quality 10']);
-					done();
-				}).catch(done);
+			it('should ignore invalid actions', () => {
+				return im
+					.transform('src.jpg', 'dst.jpg', {
+						quality: 10,
+						exec: 'no',
+						foobar: 'monkey'
+					})
+					.then((commands) => {
+						commands.should.eql(['-quality 10']);
+					});
 			});
 
-			it('should create commands in order on transform', function (done) {
-				var expected = [
+			it('should create commands in order on transform', () => {
+				const expected = [
 					'-quality 10',
 					'-strip',
 					'-unsharp 0.8x0.8+1.2+0.05',
@@ -126,17 +169,18 @@ describe('Imagick', function () {
 					'-crop 10x12+1+2'
 				];
 
-				im.transform(imageFile, 'dst.jpg', {
-					quality: 10,
-					strip: true,
-					sharpen: { mode: 'variable' },
-					resize: { width: 100, flag: '!' },
-					crop: { width: 10, height: 12, x: 1, y: 2 },
-					rotate: { angle: 20 }
-				}).then(function (commands) {
-					commands.should.eql(expected);
-					done();
-				}).catch(done);
+				return im
+					.transform(imageFile, 'dst.jpg', {
+						quality: 10,
+						strip: true,
+						sharpen: { mode: 'variable' },
+						resize: { width: 100, flag: '!' },
+						crop: { width: 10, height: 12, x: 1, y: 2 },
+						rotate: { angle: 20 }
+					})
+					.then((commands) => {
+						commands.should.eql(expected);
+					});
 			});
 		});
 	});

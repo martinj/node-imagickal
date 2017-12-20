@@ -1,5 +1,8 @@
 {
-	"extends": "@aptoma/eslint-config/lib/es5",
+	"extends": "@aptoma/eslint-config",
+	"parserOptions": {
+		"ecmaVersion": 2017
+	},
 	"env": {
 		"node": true,
 		"mocha": true,
