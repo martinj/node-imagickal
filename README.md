@@ -10,6 +10,7 @@ node wrapper for ImageMagick commands
 
 ## Examples
 
+```javascript
 	var im = require('imagickal');
 
 	//get image dimensions
@@ -32,6 +33,16 @@ node wrapper for ImageMagick commands
 	im.identify('image.jpg', function (err, data) {
 		console.log(data);
 	});
+
+	//Using streams instead of filepath
+	im.identify(fs.createReadStream('image.jpg'), function (err, data) {
+		console.log(data);
+	});
+
+	im.transform(fs.createReadStream('image.jpg'), fs.createWriteStream('out.jpg', {encoding: 'binary'}), {strip: true}).then(function () {
+		console.log('Done')
+	});
+
 
 	//transform image with action object,
 	//actions is applied in the same order as they are recevied
@@ -61,6 +72,7 @@ node wrapper for ImageMagick commands
 
 	//or set global for im.
 	im.setDefaults({ executable: 'MAGICK_MEMORY_LIMIT=256MB /tmp/convert' });
+```
 
 ## Available image actions / commands
 
