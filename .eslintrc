@@ -9,6 +9,7 @@
 		"es6": false
 	},
 	"rules": {
-		"object-curly-spacing": [2, "always"]
+		"object-curly-spacing": [2, "always"],
+		"complexity": ["error", 20]
 	}
 }
