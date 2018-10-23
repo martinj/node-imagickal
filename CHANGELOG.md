@@ -1,3 +1,7 @@
+### 4.0.0
+
+* [[276afc2](../../commit/276afc2)] Variable sharpening will be selected based on the lowest of width or height instead of both. This also fixes a problem with using streams.
+
 ### 3.0.0
 
 * [[afb841f](../../commit/afb841f)] Node 8 and support for using streams
