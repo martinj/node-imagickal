@@ -4,7 +4,7 @@ const stream = require('stream');
 const Readable = stream.Readable;
 const Writeable = stream.Writable;
 const ImageMagickCommands = require('../lib/commands');
-const isJPG = require('./helper').isJPG;
+const { isJPG, isPNG } = require('./helper');
 
 const imageFile = __dirname + '/fixtures/small.jpg';
 
@@ -157,6 +157,18 @@ describe('ImageMagickCommands', () => {
 				.then(() => {
 					isJPG('test.jpg').should.be.true();
 				});
+		});
+
+		it('should support outputFormat', async () => {
+			const cmds = new ImageMagickCommands();
+			await cmds.strip().exec(imageFile, 'test.jpg', { format: 'png' });
+			isPNG('test.jpg').should.be.true();
+		});
+
+		it('should support outputFormat using streams', async () => {
+			const cmds = new ImageMagickCommands();
+			await cmds.exec(fs.createReadStream(imageFile), fs.createWriteStream('test.jpg', { encoding: 'binary' }), { format: 'png' });
+			isPNG('test.jpg').should.be.true();
 		});
 
 		it('should support streams', () => {
