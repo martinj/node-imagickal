@@ -1,3 +1,7 @@
+### 4.1.0
+
+* [[fd820fd](../../commit/fd820fd)] Add support for specifying output format
+
 ### 4.0.0
 
 * [[276afc2](../../commit/276afc2)] Variable sharpening will be selected based on the lowest of width or height instead of both. This also fixes a problem with using streams.
