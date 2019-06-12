@@ -34,12 +34,12 @@
     "debug": "^3.1.0"
   },
   "devDependencies": {
-    "file-type": "^7.4.0",
-    "read-chunk": "^2.1.0",
     "@aptoma/eslint-config": "^7.0.1",
     "eslint": "^4.13.1",
+    "file-type": "^11.1.0",
     "istanbul": "^0.4.2",
     "mocha": "^4.0.1",
+    "read-chunk": "^2.1.0",
     "release-it": "2.4.3",
     "should": "^13.1.3"
   },
