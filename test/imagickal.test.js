@@ -1,4 +1,5 @@
 'use strict';
+
 const Promise = require('bluebird');
 const fs = require('fs');
 const ImagickCommands = require('../lib/commands');
@@ -9,6 +10,7 @@ require('should');
 
 const imageFile = __dirname + '/fixtures/small.jpg';
 const animImage = __dirname + '/fixtures/anim.gif';
+const svgFile = __dirname + '/fixtures/small.svg';
 
 describe('Imagick', () => {
 	describe('#setDefaults', () => {
@@ -113,6 +115,41 @@ describe('Imagick', () => {
 					dst.should.equal('dst.jpg');
 					done();
 				});
+			});
+		});
+
+		describe('svg', () => {
+			it('should convert svg to jpg', async () => {
+				const dst = await im.transform(svgFile, 'dst.jpg', {});
+				dst.should.equal('dst.jpg');
+				const dimensions = await im.identify(dst);
+				dimensions.should.match({
+					format: 'jpg',
+					width: 534,
+					height: 544
+				});
+			});
+
+			it('should convert svg to png', async () => {
+				const dst = await im.transform(svgFile, 'dst.png', {});
+				dst.should.equal('dst.png');
+				const dimensions = await im.identify(dst);
+				dimensions.should.match({
+					format: 'png',
+					width: 534,
+					height: 544
+				});
+			});
+
+			it('should support variable density', async () => {
+				const small = await im.transform(svgFile, 'dst.png', { density: 50 });
+				const smallDims = await im.identify(small);
+
+				const large = await im.transform(svgFile, 'dst.png', { density: 150 });
+				const largeDims = await im.identify(large);
+
+				smallDims.height.should.be.lessThan(largeDims.height);
+				smallDims.width.should.be.lessThan(largeDims.width);
 			});
 		});
 
