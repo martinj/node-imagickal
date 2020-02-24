@@ -1,3 +1,6 @@
 node_modules
 coverage
 package-lock.json
+dst.jpg
+dst.png
+test.jpg

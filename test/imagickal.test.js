@@ -1,7 +1,9 @@
 'use strict';
+
 const Promise = require('bluebird');
 const fs = require('fs');
 const ImagickCommands = require('../lib/commands');
+const execSync = require('child_process').execSync; // eslint-disable-line no-sync
 const im = require(__dirname + '/../');
 const isJPG = require('./helper').isJPG;
 
@@ -9,6 +11,7 @@ require('should');
 
 const imageFile = __dirname + '/fixtures/small.jpg';
 const animImage = __dirname + '/fixtures/anim.gif';
+const svgFile = __dirname + '/fixtures/small.svg';
 
 describe('Imagick', () => {
 	describe('#setDefaults', () => {
@@ -113,6 +116,30 @@ describe('Imagick', () => {
 					dst.should.equal('dst.jpg');
 					done();
 				});
+			});
+		});
+
+		describe('svg', () => {
+			it('should convert svg to jpg', async () => {
+				const dst = await im.transform(svgFile, 'dst.jpg', {});
+				dst.should.equal('dst.jpg');
+				const res = execSync(`identify -format "width:%w height:%h %m" ${dst}`).toString();
+				res.should.match(/width:534 height:544 JPEG/);
+			});
+
+			it('should convert svg to png', async () => {
+				const dst = await im.transform(svgFile, 'dst.png', {});
+				dst.should.equal('dst.png');
+				const res = execSync(`identify -format "width:%w height:%h %m" ${dst}`).toString();
+				res.should.match(/width:534 height:544 PNG/);
+			});
+
+			it('should support variable density', async () => {
+				const dst = await im.transform(svgFile, 'dst.png', { density: 150 });
+				dst.should.equal('dst.png');
+				const res = execSync(`identify -format "width:%w height:%h %m" ${dst}`).toString();
+				res.should.match(/width:834 height:850 PNG/);
+
 			});
 		});
 

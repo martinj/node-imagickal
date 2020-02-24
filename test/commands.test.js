@@ -126,6 +126,14 @@ describe('ImageMagickCommands', () => {
 		});
 	});
 
+	describe('#density', () => {
+		it('should support variable density', () => {
+			const cmds = new ImageMagickCommands();
+			const cmd = cmds.density(300).get('src.jpg', 'dst.jpg');
+			cmd.should.equal('convert -density 300 src.jpg dst.jpg');
+		});
+	});
+
 	describe('#extent', () => {
 		it('should be ignored if width or height is not set', () => {
 			const cmds = new ImageMagickCommands();
