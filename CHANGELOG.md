@@ -1,3 +1,8 @@
+### 4.2.0
+
+* [[2d0237d](../../commit/2d0237d)] Make DPI-test more portable
+* [[8da0ab3](../../commit/8da0ab3)] Support variable density for rendering graphics, add SVG-tests
+
 ### 4.1.0
 
 * [[fd820fd](../../commit/fd820fd)] Add support for specifying output format
