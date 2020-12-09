@@ -81,6 +81,14 @@ describe('Imagick', () => {
 				});
 		});
 
+		it('should support extra format options', () => {
+			return im
+				.identify(imageFile, { format: { orient: '%[orientation]' } })
+				.then((data) => {
+					data.should.eql({ format: 'jpg', width: 13, height: 10, images: 1, orient: 'TopLeft' });
+				});
+		});
+
 		it('should accept callback function', (done) => {
 			im.identify(animImage, (err, data) => {
 				if (err) {
