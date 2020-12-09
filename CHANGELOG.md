@@ -1,3 +1,7 @@
+### 5.0.0
+
+* [[d1baf22](../../commit/d1baf22)] Add support for custom output format on `.identify()`. Function signature has been changed.
+
 ### 4.2.0
 
 * [[2d0237d](../../commit/2d0237d)] Make DPI-test more portable
