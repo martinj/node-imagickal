@@ -1,3 +1,7 @@
+### 5.0.1
+
+* [[f771e46](../../commit/f771e46)] Quotes to paths added
+
 ### 5.0.0
 
 * [[d1baf22](../../commit/d1baf22)] Add support for custom output format on `.identify()`. Function signature has been changed.
