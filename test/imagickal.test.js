@@ -20,12 +20,12 @@ describe('Imagick', () => {
 
 		it('should use global defaults', () => {
 			im.setDefaults({ executable: 'foobar' });
-			im.commands().get('a', 'b').should.equal('foobar a b');
+			im.commands().get('a', 'b').should.equal('foobar "a" "b"');
 		});
 
 		it('should ignore global defaults if options is passed to commands()', () => {
 			im.setDefaults({ executable: 'foobar' });
-			im.commands({ executable: 'monkey' }).get('a', 'b').should.equal('monkey a b');
+			im.commands({ executable: 'monkey' }).get('a', 'b').should.equal('monkey "a" "b"');
 		});
 	});
 
